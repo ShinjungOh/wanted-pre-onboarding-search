@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import search_icon from '../../lib/images/search_icon.svg';
 import { getSearchData } from '../../lib/apis/searchApi';
-
-interface SickItemProps {
-  sickCd: string;
-  sickNm: string;
-}
+import { SickItemProps } from '../../lib/types/sickItem.interface';
 
 const SearchPage = () => {
   const [keyword, setKeyword] = useState('');
@@ -57,7 +53,7 @@ const SearchPage = () => {
                 <li>검색 결과가 없습니다.</li>
               ) : (
                 <>
-                  {Object.values(searchedKeywords).map((searchedKeyword) => (
+                  {searchedKeywords.map((searchedKeyword) => (
                     <li
                       key={searchedKeyword.sickCd}
                     >
