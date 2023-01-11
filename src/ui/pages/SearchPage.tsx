@@ -32,7 +32,6 @@ const SearchPage = () => {
 
   const handleSubmitKeyword = () => {
     requestSearchKeyword(keyword);
-    console.log('button click');
   }
 
   return (
