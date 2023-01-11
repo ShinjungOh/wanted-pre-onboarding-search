@@ -11,14 +11,15 @@ const SearchPage = () => {
   const handleChangeInput = (e: any) => {
     const { value } = e.target;
     setKeyword(value);
+    requestSearchKeyword(value);
   };
 
   const isOpenSearchKeywords = keyword.length > 0;
   const isEmptySearchKeywords = keyword.length > 0 && searchedKeywords.length === 0;
 
-  const handleSubmitKeyword = async () => {
+  const requestSearchKeyword = async (value: string) => {
     try {
-      const searchData = await getSearchData(keyword);
+      const searchData = await getSearchData(value);
       console.log(searchData);
       console.info('calling api');
       setSearchedKeywords(searchData);
@@ -27,7 +28,12 @@ const SearchPage = () => {
     }
   };
 
-  console.log(searchedKeywords);
+  // console.log(searchedKeywords);
+
+  const handleSubmitKeyword = () => {
+    requestSearchKeyword(keyword);
+    console.log('button click');
+  }
 
   return (
     <>
