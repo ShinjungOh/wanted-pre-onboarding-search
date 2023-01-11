@@ -20,7 +20,7 @@ const SearchPage = () => {
   const requestSearchKeyword = async (value: string) => {
     try {
       const searchData = await getSearchData(value);
-      console.log(searchData);
+      // console.log(searchData);
       console.info('calling api');
       setSearchedKeywords(searchData);
     } catch (e) {
@@ -182,25 +182,28 @@ const SearchKeywords = styled.ul`
   width: 100%;
   max-width: 490px;
   height: auto;
+  max-height: 500px;
   padding: 20px 0 20px 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 379px;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: white;
   border: none;
   border-radius: 20px;
   outline: none;
-  position: relative;
-  top: -30%;
-  left: 26%;
   overflow-y: auto;
   z-index: 1;
   box-shadow: 0 3px 5px rgba(131, 131, 131, 0.3);
   list-style: none;
-  display: inline-table;
 
   li {
     width: 100%;
     height: 40px;
-    padding: 2px 35px;
+    padding: 20px 35px 20px 35px;
     cursor: pointer;
     display: flex;
     flex-direction: row;
