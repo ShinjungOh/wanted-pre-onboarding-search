@@ -10,12 +10,15 @@ interface SickItemProps {
 
 const SearchPage = () => {
   const [keyword, setKeyword] = useState('');
-  const [searchedKeywords, setSearchedKeywords] = useState<SickItemProps>();
+  const [searchedKeywords, setSearchedKeywords] = useState<SickItemProps[]>([]);
 
   const handleChangeInput = (e: any) => {
     const { value } = e.target;
     setKeyword(value);
   };
+
+  const isOpenSearchKeywords = keyword.length > 0;
+  const isEmptySearchKeywords = keyword.length > 0 && searchedKeywords.length === 0;
 
   const handleSubmitKeyword = async () => {
     try {
@@ -23,11 +26,12 @@ const SearchPage = () => {
       console.log(searchData);
       console.info('calling api');
       setSearchedKeywords(searchData);
-      return searchData;
     } catch (e) {
       alert('검색에 실패했습니다.');
     }
   };
+
+  console.log(searchedKeywords);
 
   return (
     <>
@@ -46,14 +50,22 @@ const SearchPage = () => {
         </InputBox>
       </Container>
       {
-        searchedKeywords && (
+        isOpenSearchKeywords && (
           <SearchKeywords>
-            {Object.values(searchedKeywords).map((searchedKeyword) => (
-              <li
-                key={searchedKeyword.sickCd}
-              >
-                {searchedKeyword.sickNm}
-              </li>))
+            {
+              isEmptySearchKeywords ? (
+                <li>검색 결과가 없습니다.</li>
+              ) : (
+                <>
+                  {Object.values(searchedKeywords).map((searchedKeyword) => (
+                    <li
+                      key={searchedKeyword.sickCd}
+                    >
+                      {searchedKeyword.sickNm}
+                    </li>))
+                  }
+                </>
+              )
             }
           </SearchKeywords>
         )
