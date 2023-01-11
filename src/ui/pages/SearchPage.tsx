@@ -1,28 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import search_icon from '../../lib/images/search_icon.svg';
+import { getSearchData } from '../../lib/apis/searchApi';
 
-const SearchPage = () => (
-  <Container>
-    <Title>
-      국내 모든 임상시험 검색하고
-      <br />
-      온라인으로 참여하기
-    </Title>
-    <InputBox>
-      <Input type='text' placeholder='🔍  질환명을 입력해 주세요.' />
-      <Button>
-        <img src={search_icon} width={20} height={20} alt='search_icon' />
-      </Button>
-    </InputBox>
-    <CancelButton>ⅹ</CancelButton>
-    <SearchKeywords>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-    </SearchKeywords>
-  </Container>
-);
+interface SickItemProps {
+  sickCd: string;
+  sickNm: string;
+}
+
+const SearchPage = () => {
+  const [keyword, setKeyword] = useState('');
+  const [searchedKeywords, setSearchedKeywords] = useState<SickItemProps>();
+
+  const handleChangeInput = (e: any) => {
+    const { value } = e.target;
+    setKeyword(value);
+  };
+
+  const handleSubmitKeyword = async () => {
+    try {
+      const searchData = await getSearchData(keyword);
+      console.log(searchData);
+      console.info('calling api');
+      setSearchedKeywords(searchData);
+      return searchData;
+    } catch (e) {
+      alert('검색에 실패했습니다.');
+    }
+  };
+
+  return (
+    <>
+      <Container>
+        <Title>
+          국내 모든 임상시험 검색하고
+          <br />
+          온라인으로 참여하기
+        </Title>
+        <InputBox>
+          <Input type='text' placeholder='🔍  질환명을 입력해 주세요.' onChange={handleChangeInput} value={keyword} />
+          <CancelButton>ⅹ</CancelButton>
+          <Button onClick={handleSubmitKeyword}>
+            <img src={search_icon} width={20} height={20} alt='search_icon' />
+          </Button>
+        </InputBox>
+      </Container>
+      {
+        searchedKeywords && (
+          <SearchKeywords>
+            {Object.values(searchedKeywords).map((searchedKeyword) => (
+              <li
+                key={searchedKeyword.sickCd}
+              >
+                {searchedKeyword.sickNm}
+              </li>))
+            }
+          </SearchKeywords>
+        )
+      }
+    </>
+  );
+};
 
 export default SearchPage;
 
@@ -41,7 +79,6 @@ const Title = styled.h2`
   width: 100%;
   height: 108px;
   padding: 0;
-  margin-top: 0;
   margin-bottom: 40px;
   font-size: 36px;
   font-weight: 700;
@@ -108,15 +145,13 @@ const CancelButton = styled.button`
   color: #FFFFFF;
   z-index: 1;
   cursor: pointer;
-  position: relative;
-  margin: 0 10px;
-  top: -20%;
-  left: 13%;
 `;
 
 const Button = styled.button`
   width: 48px;
   height: 48px;
+  padding: 18px;
+  margin-left: 15px;
   border-radius: 100%;
   display: flex;
   flex-direction: row;
@@ -130,7 +165,8 @@ const Button = styled.button`
 `;
 
 const SearchKeywords = styled.ul`
-  width: 490px;
+  width: 100%;
+  max-width: 490px;
   height: auto;
   padding: 20px 0 20px 0;
   margin: 0;
@@ -138,13 +174,14 @@ const SearchKeywords = styled.ul`
   border: none;
   border-radius: 20px;
   outline: none;
-  position: fixed;
-  top: 355px;
-  left: 367px;
+  position: relative;
+  top: -30%;
+  left: 26%;
   overflow-y: auto;
   z-index: 1;
   box-shadow: 0 3px 5px rgba(131, 131, 131, 0.3);
   list-style: none;
+  display: inline-table;
 
   li {
     width: 100%;
