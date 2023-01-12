@@ -60,13 +60,13 @@ const SearchPage = () => {
           온라인으로 참여하기
         </Title>
         <InputBox>
-          <Input type='text' placeholder='🔍  질환명을 입력해 주세요.' onChange={handleChangeInput} value={keyword} />
+          <Input type='text' placeholder='🔍  질환명을 입력해 주세요.' onChange={handleChangeInput} value={keyword} tabIndex={1}/>
           {
             isOpenSearchKeywords && (
-              <CancelButton onClick={handleCancel}>ⅹ</CancelButton>
+              <CancelButton onClick={handleCancel} tabIndex={2}>ⅹ</CancelButton>
             )
           }
-          <Button onClick={handleSubmitKeyword}>
+          <Button onClick={handleSubmitKeyword} tabIndex={3}>
             <img src={search_icon} width={20} height={20} alt='search_icon' />
           </Button>
         </InputBox>
@@ -79,9 +79,10 @@ const SearchPage = () => {
                 <li>검색 결과가 없습니다.</li>
               ) : (
                 <>
-                  {searchedKeywords.map((searchedKeyword) => (
+                  {searchedKeywords.map((searchedKeyword, index) => (
                     <li
                       key={searchedKeyword.sickCd}
+                      tabIndex={index + 4}
                     >
                       {searchedKeyword.sickNm}
                     </li>))
