@@ -7,15 +7,29 @@ import { SickItemProps } from '../../lib/types/sickItem.interface';
 const SearchPage = () => {
   const [keyword, setKeyword] = useState('');
   const [searchedKeywords, setSearchedKeywords] = useState<SickItemProps[]>([]);
+  const [timer, setTimer] = useState(0);
+
+  const isOpenSearchKeywords = keyword.length > 0;
+  const isEmptySearchKeywords = keyword.length > 0 && searchedKeywords.length === 0;
 
   const handleChangeInput = (e: any) => {
     const { value } = e.target;
     setKeyword(value);
-    requestSearchKeyword(value);
-  };
 
-  const isOpenSearchKeywords = keyword.length > 0;
-  const isEmptySearchKeywords = keyword.length > 0 && searchedKeywords.length === 0;
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    const newTimer = setTimeout(async () => {
+      try {
+        await requestSearchKeyword(value);
+      } catch (e) {
+        console.error('error', e);
+      }
+    }, 400);
+
+    setTimer(newTimer as unknown as number);
+  };
 
   const requestSearchKeyword = async (value: string) => {
     try {
@@ -27,8 +41,6 @@ const SearchPage = () => {
       alert('검색에 실패했습니다.');
     }
   };
-
-  // console.log(searchedKeywords);
 
   const handleSubmitKeyword = () => {
     requestSearchKeyword(keyword);
