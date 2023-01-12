@@ -8,6 +8,7 @@ const SearchPage = () => {
   const [keyword, setKeyword] = useState('');
   const [searchedKeywords, setSearchedKeywords] = useState<SickItemProps[]>([]);
   const [timer, setTimer] = useState(0);
+  const [cacheSearchedKeywords, setCacheSearchedKeywords ] = useState<{[k: string]: Array<SickItemProps>}>({});
 
   const isOpenSearchKeywords = keyword.length > 0;
   const isEmptySearchKeywords = keyword.length > 0 && searchedKeywords.length === 0;
@@ -33,14 +34,27 @@ const SearchPage = () => {
 
   const requestSearchKeyword = async (value: string) => {
     try {
+      if (cacheSearchedKeywords[value]) {
+        setSearchedKeywords(cacheSearchedKeywords[value])
+        return;
+      }
+
+      console.log('value >> ', value);
+
       const searchData = await getSearchData(value);
       // console.log(searchData);
       console.info('calling api');
       setSearchedKeywords(searchData);
+      setCacheSearchedKeywords((prev) => ({
+        ...prev,
+        [value]: searchData,
+      }));
     } catch (e) {
       alert('검색에 실패했습니다.');
     }
   };
+
+  // console.log(cacheSearchedKeywords);
 
   const handleSubmitKeyword = () => {
     requestSearchKeyword(keyword);
@@ -56,7 +70,7 @@ const SearchPage = () => {
     const searchValue = inputValue.toLowerCase();
     if (searchValue !== '' && title.includes(searchValue)) {
       const matchText = text.split(new RegExp(`(${searchValue})`, 'gi'));
-      console.log(matchText);
+      // console.log(matchText);
       return (
         <>
           {matchText.map((word, index) =>
