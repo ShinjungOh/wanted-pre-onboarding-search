@@ -24,6 +24,17 @@ npm install
 npm start
 ```
 
+### 서버 실행 방법 
+
+```md
+git clone https://github.com/walking-sunset/assignment-api_8th
+
+npm install
+npm start 
+```
+
+`localhost:4000`에 API 서버 실행
+
 <br><br>
 
 ## 디렉토리 구조
