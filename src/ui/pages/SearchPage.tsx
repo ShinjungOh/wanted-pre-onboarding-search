@@ -51,6 +51,30 @@ const SearchPage = () => {
     setSearchedKeywords([]);
   };
 
+  const highlightIncludedText = (text: string, inputValue: string) => {
+    const title = text.toLowerCase();
+    const searchValue = inputValue.toLowerCase();
+    if (searchValue !== '' && title.includes(searchValue)) {
+      const matchText = text.split(new RegExp(`(${searchValue})`, 'gi'));
+      console.log(matchText);
+      return (
+        <>
+          {matchText.map((word, index) =>
+            word.toLowerCase() === searchValue ? (
+              <strong key={index}>
+                {word}
+              </strong>
+            ) : (
+              word
+            ),
+          )}
+        </>
+      );
+    }
+
+    return text;
+  };
+
   return (
     <>
       <Container>
@@ -84,7 +108,9 @@ const SearchPage = () => {
                       key={searchedKeyword.sickCd}
                       tabIndex={index + 4}
                     >
-                      {searchedKeyword.sickNm}
+                      {
+                        highlightIncludedText(searchedKeyword.sickNm, keyword)
+                      }
                     </li>))
                   }
                 </>
