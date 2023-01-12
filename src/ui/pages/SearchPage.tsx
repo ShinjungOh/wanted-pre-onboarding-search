@@ -44,7 +44,12 @@ const SearchPage = () => {
 
   const handleSubmitKeyword = () => {
     requestSearchKeyword(keyword);
-  }
+  };
+
+  const handleCancel = () => {
+    setKeyword('');
+    setSearchedKeywords([]);
+  };
 
   return (
     <>
@@ -56,7 +61,11 @@ const SearchPage = () => {
         </Title>
         <InputBox>
           <Input type='text' placeholder='🔍  질환명을 입력해 주세요.' onChange={handleChangeInput} value={keyword} />
-          <CancelButton>ⅹ</CancelButton>
+          {
+            isOpenSearchKeywords && (
+              <CancelButton onClick={handleCancel}>ⅹ</CancelButton>
+            )
+          }
           <Button onClick={handleSubmitKeyword}>
             <img src={search_icon} width={20} height={20} alt='search_icon' />
           </Button>
