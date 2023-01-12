@@ -39,10 +39,7 @@ const SearchPage = () => {
         return;
       }
 
-      console.log('value >> ', value);
-
       const searchData = await getSearchData(value);
-      // console.log(searchData);
       console.info('calling api');
       setSearchedKeywords(searchData);
       setCacheSearchedKeywords((prev) => ({
@@ -53,8 +50,6 @@ const SearchPage = () => {
       alert('검색에 실패했습니다.');
     }
   };
-
-  // console.log(cacheSearchedKeywords);
 
   const handleSubmitKeyword = () => {
     requestSearchKeyword(keyword);
@@ -70,7 +65,6 @@ const SearchPage = () => {
     const searchValue = inputValue.toLowerCase();
     if (searchValue !== '' && title.includes(searchValue)) {
       const matchText = text.split(new RegExp(`(${searchValue})`, 'gi'));
-      // console.log(matchText);
       return (
         <>
           {matchText.map((word, index) =>
